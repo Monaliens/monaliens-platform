@@ -78,15 +78,11 @@ Each game directory contains: Solidity contract(s), a Node.js backend, Hardhat c
 |------|------|-------------|
 | Raffle | `tools/raffle/` | On-chain NFT raffle system |
 | P2P Trading | `tools/p2p/` | Peer-to-peer NFT/token trading with clone-factory contracts |
-| Bleep Airdrop | `tools/bleep-airdrop/` | Batch airdrop utility |
+| Airdrop | `tools/airdrop/` | Daily LMON token airdrop for stakers |
 | TEE Wallet | `tools/tee-wallet/` | Trusted Execution Environment game wallet (AMD SEV) |
-| NFT Verification | `tools/nft-verification/` | Holder verification service |
 | DC Bot | `tools/dc-bot/` | Discord bot for notifications and community tooling |
 | Event Listener | `tools/event-listener/` | Generic on-chain event indexer |
-| Mock RPC | `tools/mock-rpc/` | Local mock RPC node for testing |
-| Mining | `tools/mining/` | On-chain mining game mechanics |
 | Whitelist Checker | `tools/whitelist-checker/` | Merkle proof based allowlist verification |
-| Tournament CLI | `tools/tournament-cli/` | CLI to manage and score on-chain tournaments |
 
 ### Contracts
 
@@ -99,7 +95,6 @@ Each game directory contains: Solidity contract(s), a Node.js backend, Hardhat c
 
 | Service | Path | Description |
 |---------|------|-------------|
-| RPC API | `infrastructure/rpc-api/` | Monad RPC health pool — returns the fastest live endpoint |
 | Gatus | `infrastructure/gatus/` | Self-hosted uptime monitoring for all platform services |
 
 ---
@@ -117,7 +112,6 @@ Each game directory contains: Solidity contract(s), a Node.js backend, Hardhat c
 | Storage | Cloudflare R2 (NFT metadata and images) |
 | Infrastructure | Docker, docker-compose, GitHub Actions CI/CD |
 | TEE | AMD SEV (Trusted Execution Environment for game wallet key isolation) |
-| RPC | TypeScript + Express RPC health pool (`infrastructure/rpc-api`) |
 
 ---
 
