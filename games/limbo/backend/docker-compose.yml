@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  limbo-backend:
+    build: .
+    container_name: limbo-backend
+    restart: unless-stopped
+    ports:
+      - "9599:9599"
+    environment:
+      - NODE_ENV=production
+      - PORT=9599
+      - MONGODB_URI=${MONGODB_URI}
+      # Defaults: ovg local RPC on host (see AGENTS.md). Override for remote RPC/WS.
+      - RPC_URL=${RPC_URL:-http://host.docker.internal:8080}
+      - WS_URL=${WS_URL:-ws://host.docker.internal:8081}
+      - LIMBO_CONTRACT_ADDRESS=${LIMBO_CONTRACT_ADDRESS}
+      - DISCORD_API_URL=${DISCORD_API_URL:-http://host.docker.internal:11111/api}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9599/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

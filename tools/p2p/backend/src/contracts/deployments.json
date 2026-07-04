@@ -1,0 +1,18 @@
+{
+  "network": "monad-testnet",
+  "chainId": 10143,
+  "deployer": "0xbA853c29B52Dc14fa13E85ACb13887e41F209f83",
+  "contracts": {
+    "P2PTradingFactory": "0x74F7bB80ffa125Bde5cb5Af0cc9A676c140fBa81",
+    "OfferTemplate": "0xFcD38F777BE4C71163038186d8b3d7750afe08A3"
+  },
+  "config": {
+    "platformOwner": "0xbA853c29B52Dc14fa13E85ACb13887e41F209f83",
+    "settlementAdmin": "0xbA853c29B52Dc14fa13E85ACb13887e41F209f83",
+    "platformFeeBps": 0,
+    "maxOfferDuration": 604800,
+    "minOfferDuration": 60,
+    "settlementInterval": 20
+  },
+  "deployedAt": "2025-07-04T20:27:19.869Z"
+}

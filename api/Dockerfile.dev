@@ -1,0 +1,41 @@
+FROM node:18-alpine
+
+# Development ortamı olarak ayarla
+ENV NODE_ENV=development
+
+# Gerekli araçları yükle
+RUN apk add --no-cache bash curl wget
+
+# Non-root kullanıcı oluştur
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S apiuser -u 1001 -G nodejs
+
+WORKDIR /app
+
+# Paket dosyalarını kopyala
+COPY package*.json ./
+
+# Tüm bağımlılıkları yükle (development bağımlılıkları dahil)
+RUN npm install
+
+# Environment dosyasını kopyala (.env.development'i .env olarak kullan)
+COPY .env.development .env
+
+# Uygulamanın geri kalanını kopyala
+COPY ./src ./src
+
+# Non-root kullanıcıya yetki ver
+RUN chown -R apiuser:nodejs /app
+
+# Non-root kullanıcıya geç
+USER apiuser
+
+# Development portunu aç
+EXPOSE 3010
+
+# Health check için
+HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
+  CMD wget -qO- http://localhost:3010/health || exit 1
+
+# Uygulamayı çalıştır - backend proxy routes içeren güncel dosyayı kullan
+CMD ["node", "src/index.js"]

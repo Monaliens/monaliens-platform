@@ -1,0 +1,25 @@
+services:
+  dice-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dice-api
+    restart: unless-stopped
+    ports:
+      - "9596:9596"
+    env_file:
+      - .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:9596/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - dice-network
+
+networks:
+  dice-network:
+    driver: bridge

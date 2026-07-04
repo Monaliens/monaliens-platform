@@ -1,0 +1,40 @@
+{
+  "name": "flip-event-api",
+  "version": "1.0.0",
+  "description": "CoinFlip event listener and API",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev -p 3090",
+    "build": "next build",
+    "start": "next start -p 3090",
+    "listener": "tsx src/listener/index.ts",
+    "listener:dev": "tsx watch src/listener/index.ts",
+    "start:all": "concurrently \"npm run listener\" \"npm run dev\" --names \"LISTENER,API\" --prefix-colors \"cyan,yellow\"",
+    "start:all:dev": "concurrently \"npm run listener:dev\" \"npm run dev\" --names \"LISTENER,API\" --prefix-colors \"cyan,yellow\"",
+    "test:api": "curl http://localhost:3090/api/flips/recent",
+    "test:user": "curl http://localhost:3090/api/flips/user/0x0000000000000000000000000000000000000000",
+    "test:stats": "curl http://localhost:3090/api/stats",
+    "sync": "tsx src/scripts/sync-events.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "ethers": "^6.13.0",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.3.0",
+    "dotenv": "^16.4.0",
+    "concurrently": "^8.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.3.0",
+    "tsx": "^4.7.0"
+  }
+}
+

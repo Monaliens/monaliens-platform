@@ -1,0 +1,50 @@
+services:
+  frontend-staging:
+    build:
+      context: .
+      dockerfile: Dockerfile.staging
+      args:
+        - NODE_ENV=production
+      cache_from:
+        - node:20-alpine
+    container_name: monaliens-frontend-staging
+    ports:
+      - "3202:3202"
+    env_file:
+      - .env.staging
+    environment:
+      - PORT=3202
+    volumes:
+      # Cache volumes for better performance
+      - build_cache_staging:/app/.cache
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3202"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+    # Resource limits for staging
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    # Security options
+    security_opt:
+      - no-new-privileges:true
+    read_only: false
+    tmpfs:
+      - /tmp:noexec,nosuid,size=100m
+
+volumes:
+  build_cache_staging:
+    driver: local

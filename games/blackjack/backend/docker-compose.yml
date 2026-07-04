@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  blackjack-api:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    container_name: blackjack-api
+    restart: unless-stopped
+    ports:
+      - "9597:9597"
+    env_file:
+      - ../.env
+    networks:
+      - blackjack_network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:9597/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  blackjack_network:
+    driver: bridge

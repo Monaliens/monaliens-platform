@@ -1,0 +1,33 @@
+services:
+  frontend-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+      args:
+        - NODE_ENV=production
+    container_name: frontend-prod
+    ports:
+      - "3200:3200"
+    env_file:
+      - .env.production
+    environment:
+      - PORT=3200
+    restart: unless-stopped
+    networks:
+      - frontend-prod-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3200"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+
+networks:
+  frontend-prod-network:
+    driver: bridge 

@@ -1,0 +1,269 @@
+# Gatus Configuration - Monaliens Status Page
+
+storage:
+  type: sqlite
+  path: /data/gatus.db
+
+ui:
+  title: "Monaliens Status"
+  header: "Monaliens Service Status"
+  logo: ""
+  link: "https://monaliens.xyz"
+
+alerting:
+  telegram:
+    token: "${TELEGRAM_BOT_TOKEN}"
+    id: "${TELEGRAM_CHAT_ID}"
+    default-alert:
+      enabled: true
+      failure-threshold: 3
+      success-threshold: 2
+      send-on-resolved: true
+      description: "Service status changed!"
+
+  # Second recipient via custom webhook
+  custom:
+    url: "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"
+    method: "POST"
+    headers:
+      Content-Type: "application/json"
+    body: |
+      {
+        "chat_id": "${TELEGRAM_CHAT_ID_2}",
+        "text": "[ENDPOINT_NAME] - [ALERT_DESCRIPTION]\nStatus: [ALERT_TRIGGERED_OR_RESOLVED]",
+        "parse_mode": "HTML"
+      }
+    default-alert:
+      enabled: true
+      failure-threshold: 3
+      success-threshold: 2
+      send-on-resolved: true
+
+endpoints:
+  # ═══════════════════════════════════════════════════════════════
+  # CORE SERVICES
+  # ═══════════════════════════════════════════════════════════════
+  - name: API
+    group: Core
+    url: "https://api.monaliens.xyz/health"
+    interval: 30s
+    client:
+      timeout: 30s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: Website
+    group: Core
+    url: "https://monaliens.xyz"
+    interval: 60s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[RESPONSE_TIME] < 10000"
+
+  # ═══════════════════════════════════════════════════════════════
+  # GAME SERVICES
+  # ═══════════════════════════════════════════════════════════════
+  - name: Mines
+    group: Games
+    url: "https://your-service.example.com/api/health"
+    interval: 30s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[RESPONSE_TIME] < 5000"
+
+  - name: Flip
+    group: Games
+    url: "https://your-service.example.com/api/health"
+    interval: 30s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[RESPONSE_TIME] < 5000"
+
+  - name: Dice
+    group: Games
+    url: "https://your-service.example.com/api/health"
+    interval: 30s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[RESPONSE_TIME] < 5000"
+
+  - name: HiLo
+    group: Games
+    url: "https://your-service.example.com/api/health"
+    interval: 30s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[RESPONSE_TIME] < 5000"
+
+  - name: Blackjack
+    group: Games
+    url: "https://your-service.example.com/api/health"
+    interval: 30s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[RESPONSE_TIME] < 5000"
+
+  - name: Limbo
+    group: Games
+    url: "https://your-service.example.com/api/health"
+    interval: 30s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[RESPONSE_TIME] < 5000"
+
+  - name: Keno
+    group: Games
+    url: "https://your-service.example.com/health"
+    interval: 30s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[RESPONSE_TIME] < 5000"
+
+  # ═══════════════════════════════════════════════════════════════
+  # INFRASTRUCTURE
+  # ═══════════════════════════════════════════════════════════════
+  - name: Indexer API
+    group: Infrastructure
+    url: "https://your-service.example.com/health"
+    interval: 60s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+
+  # ═══════════════════════════════════════════════════════════════
+  # RPC HEALTH (Block height comparison)
+  # ═══════════════════════════════════════════════════════════════
+  - name: RPC Sync Status
+    group: RPC
+    url: "https://api.monaliens.xyz/api/health/rpc"
+    interval: 30s
+    client:
+      timeout: 30s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].success == true"
+
+  # ═══════════════════════════════════════════════════════════════
+  # DEEP HEALTH CHECKS (MongoDB, RPC, EventListener, Relayer, etc.)
+  # ═══════════════════════════════════════════════════════════════
+  - name: BJ Deep
+    group: Deep Health
+    url: "https://your-service.example.com/api/health/deep"
+    interval: 60s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].success == true"
+
+  - name: Dice Deep
+    group: Deep Health
+    url: "https://your-service.example.com/api/health/deep"
+    interval: 60s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].success == true"
+
+  - name: Mines Deep
+    group: Deep Health
+    url: "https://your-service.example.com/api/health/deep"
+    interval: 60s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].success == true"
+
+  - name: HiLo Deep
+    group: Deep Health
+    url: "https://your-service.example.com/api/health/deep"
+    interval: 60s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].success == true"
+
+  - name: Limbo Deep
+    group: Deep Health
+    url: "https://your-service.example.com/api/health/deep"
+    interval: 60s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].success == true"
+
+  - name: Keno Deep
+    group: Deep Health
+    url: "https://your-service.example.com/health/deep"
+    interval: 60s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].success == true"
+
+  - name: Flip Deep
+    group: Deep Health
+    url: "https://your-service.example.com/api/health/deep"
+    interval: 60s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].success == true"
+
+  - name: API Deep
+    group: Deep Health
+    url: "https://api.monaliens.xyz/api/health/deep"
+    interval: 60s
+    client:
+      timeout: 30s
+    alerts:
+      - type: telegram
+      - type: custom
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].success == true"

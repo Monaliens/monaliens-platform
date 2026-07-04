@@ -1,0 +1,49 @@
+{
+  "network": {
+    "name": "monad-mainnet",
+    "chainId": 143,
+    "rpc": {
+      "url": process.env.RPC_URL || "https://mainnet.monad.xyz"
+    },
+    "explorer": "https://monadexplorer.com"
+  },
+  "server": {
+    "port": 3015,
+    "environment": "production",
+    "cors": {
+      "origin": "${FRONTEND_URL}"
+    }
+  },
+  "database": {
+    "url": "mongodb+srv://username:password@cluster.mongodb.net/dbname?retryWrites=true&w=majority",
+    "useEnvironmentUrl": false
+  },
+  "contracts": {
+    "monToken": "0x45CFc625D98a42a223c5C054a4007B76C77216bb",
+    "testNFT": "0xc99e8a33e00D4F82A33D435C62420CBCD691409C",
+    "staking": "0xe91dB774D7938ECE4946E4622241e1Dda8dE3D85",
+    "referral": "0xB1980A3f698171542bBB6101CC145a44D1e722E0",
+    "raffleFactory": "0x5259f7d8B0734A996fa8Ec987bec648B52bB6B63",
+    "deployer": "0x5332Cf42a4Ca660A8fa660d7aCC19CB277516963",
+    "platformFeeWallet": "0x1CC17B568aA3b724DD9F48dE6593378064F35Bb3",
+    "entropyAddress": "0xD458261E832415CFd3BAE5E416FdF3230ce6F134",
+    "entropyProvider": "0x52DeaA1c84233F7bb8C8A45baeDE41091c616506"
+  },
+  "indexer": {
+    "enabled": true,
+    "startBlock": "latest",
+    "confirmationBlocks": 3,
+    "pollingInterval": 5000
+  },
+  "rateLimiting": {
+    "windowMs": 900000,
+    "max": 100
+  },
+  "security": {
+    "jwtExpiration": "24h",
+    "bcryptRounds": 12
+  },
+  "redis": {
+    "keyPrefix": "raffle"
+  },
+}

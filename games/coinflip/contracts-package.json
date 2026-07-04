@@ -1,0 +1,50 @@
+{
+  "name": "coin-flip-contracts",
+  "version": "1.0.0",
+  "description": "Coin flip smart contract using Pyth Entropy on Monad Testnet",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy": "hardhat run scripts/deploy.ts --network monad-testnet",
+    "upgrade": "hardhat run scripts/upgrade.ts --network monad-testnet",
+    "set-limits": "hardhat run scripts/set-max-bet-limits.ts --network monad-testnet",
+    "migrate-funds": "hardhat run scripts/migrate-funds.ts --network monad-testnet",
+    "fund-mon": "hardhat run scripts/fund-mon.ts --network monad-testnet",
+    "fund-lmon": "hardhat run scripts/fund-lmon.ts --network monad-testnet",
+    "flip-mon-0.1": "hardhat run scripts/flip-mon-0.1.ts --network monad-testnet",
+    "flip-lmon-10": "hardhat run scripts/flip-lmon-10.ts --network monad-testnet",
+    "verify-contract": "hardhat run scripts/verify-contract.ts --network monad-testnet",
+    "stats": "hardhat run scripts/stats.ts --network monad-testnet",
+    "withdraw-old": "hardhat run scripts/withdraw-old-contract.ts --network monad-testnet",
+    "verify": "hardhat verify --network monad-testnet",
+    "verify-addresses": "hardhat run scripts/verify-addresses.ts --network monad-testnet",
+    "check-lmon": "hardhat run scripts/check-lmon-balance.ts --network monad-testnet",
+    "test-burn": "hardhat run scripts/test-burn-lmon.ts --network monad-testnet"
+  },
+  "keywords": [
+    "solidity",
+    "smart-contracts",
+    "pyth",
+    "entropy",
+    "monad"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@openzeppelin/hardhat-upgrades": "^3.9.1",
+    "@types/node": "^20.10.0",
+    "hardhat": "^2.19.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.4.0",
+    "@openzeppelin/contracts-upgradeable": "^5.4.0",
+    "@pythnetwork/entropy-sdk-solidity": "^2.2.0",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.9.0",
+    "mongodb": "^7.0.0"
+  }
+}

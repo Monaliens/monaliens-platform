@@ -1,0 +1,20 @@
+{
+  "name": "plinko-contracts",
+  "version": "1.0.0",
+  "description": "Plinko smart contracts with Pyth Entropy VRF",
+  "scripts": {
+    "compile": "hardhat compile",
+    "deploy:mainnet": "hardhat run scripts/deploy-mainnet.js --network monadProduction",
+    "deploy:test": "hardhat run scripts/deploy-mainnet.js --network monadMainnet",
+    "fund": "hardhat run scripts/fund.js --network monadProduction",
+    "upgrade": "hardhat run scripts/upgrade.js --network monadProduction",
+    "set-multipliers": "hardhat run scripts/set-multipliers.js --network monadProduction"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@openzeppelin/contracts-upgradeable": "^5.0.2",
+    "@openzeppelin/hardhat-upgrades": "^3.0.5",
+    "dotenv": "^16.4.5",
+    "hardhat": "^2.22.16"
+  }
+}

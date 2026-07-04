@@ -1,0 +1,8 @@
+{
+  "rules": [
+    {
+      "pathPattern": "/flip",
+      "apiPath": "https://your-api-url/api/actions/flip"
+    }
+  ]
+}

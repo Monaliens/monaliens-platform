@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  raffle-backend:
+    build: .
+    container_name: raffle-backend
+    ports:
+      - "3015:3015"
+    environment:
+      - NODE_ENV=production
+      - PORT=3015
+      - FRONTEND_URL=${FRONTEND_URL}
+      - PRIVATE_KEY=${PRIVATE_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - DATABASE_URL=${DATABASE_URL}
+      - RPC_URL=${RPC_URL}
+    restart: unless-stopped
+    labels:
+      - "autoheal=true"
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - raffle-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3015/health', (res) => process.exit(res.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Periodic restart service - restarts backend every 60 minutes
+  restarter:
+    image: docker:cli
+    container_name: raffle-restarter
+    restart: always
+    command: sh -c "while true; do sleep 3600 && docker restart raffle-backend && echo 'Restarted at' $$(date); done"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - raffle-network
+
+networks:
+  raffle-network:
+    driver: bridge
+
+volumes:
+  logs: 

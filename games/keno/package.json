@@ -1,0 +1,20 @@
+{
+  "name": "keno",
+  "version": "1.0.0",
+  "description": "Keno game smart contract",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "node": "hardhat node",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "deploy:mainnet": "hardhat run scripts/deploy.js --network monadMainnet",
+    "deploy:production": "hardhat run scripts/deploy.js --network monadProduction"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@openzeppelin/contracts-upgradeable": "^5.0.0",
+    "@openzeppelin/hardhat-upgrades": "^3.0.0",
+    "dotenv": "^16.3.1",
+    "hardhat": "^2.19.0"
+  }
+}

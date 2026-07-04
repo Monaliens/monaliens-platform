@@ -1,0 +1,35 @@
+{
+  "name": "staking-contract-event-listener",
+  "version": "1.0.0",
+  "description": "Real-time event listener for Monaliens staking contract on Monad testnet",
+  "main": "event-listener.js",
+  "scripts": {
+    "start": "node event-listener.js",
+    "dev": "nodemon event-listener.js",
+    "test": "node test-connection.js"
+  },
+  "keywords": [
+    "ethereum",
+    "monad",
+    "nft",
+    "staking",
+    "event-listener",
+    "mongodb"
+  ],
+  "author": "Monaliens Team",
+  "license": "MIT",
+  "dependencies": {
+    "ethers": "^5.7.2",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.0.3",
+    "winston": "^3.11.0",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

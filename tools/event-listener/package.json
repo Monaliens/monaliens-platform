@@ -1,0 +1,28 @@
+{
+  "name": "monad-unified-event-listener",
+  "version": "1.0.0",
+  "description": "Unified Event Listener for Monad Testnet - Handles Spin, Raffle, and Offer contracts",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "node src/test.js"
+  },
+  "keywords": ["blockchain", "event-listener", "monad", "web3", "ethereum"],
+  "author": "Monad Team",
+  "license": "MIT",
+  "dependencies": {
+    "ethers": "^6.8.0",
+    "mongoose": "^8.0.0",
+    "dotenv": "^16.3.1",
+    "winston": "^3.11.0",
+    "ws": "^8.14.2",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 

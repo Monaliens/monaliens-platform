@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "framework": "create-react-app",
+  "buildCommand": "npm run build:vercel",
+  "devCommand": "npm start",
+  "installCommand": "npm ci --only=production --no-optional",
+  "outputDirectory": "build",
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/.well-known/(.*)", "dest": "/.well-known/$1" },
+    { "src": "/static/(.*)", "dest": "/static/$1" },
+    { "src": "/favicon.ico", "dest": "/favicon.ico" },
+    { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ],
+
+  "build": {
+    "env": {
+      "GENERATE_SOURCEMAP": "false",
+      "CI": "false",
+      "DISABLE_ESLINT_PLUGIN": "true"
+    }
+  }
+} 

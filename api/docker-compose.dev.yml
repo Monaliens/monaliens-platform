@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  api-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: spinwheel_api_dev
+    restart: unless-stopped
+    env_file: .env.development  # Separate env file for development
+    network_mode: host
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./src:/app/src  # Hot reload for code changes
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3010/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 500M

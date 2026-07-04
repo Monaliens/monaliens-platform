@@ -1,0 +1,164 @@
+================================================================================
+                    AUCTION PLATFORM - FEE & BID MECHANISM
+                            (drip.haus style)
+================================================================================
+
+
+1. PROFILE CREATION
+================================================================================
+- Users can create their own profiles
+- Profile fields: username, bio, profile photo, banner
+- Authentication via wallet address
+
+
+2. COLLECTION CREATION
+================================================================================
+- Users can create collections on their profile
+- Each collection is a separate NFT series
+- Collection fields:
+  * Collection name
+  * Description
+  * Collection photo
+  * Banner image
+  * Social links (Twitter, Discord, Website, etc.)
+
+
+3. COLLECTION EDITING
+================================================================================
+- Users can update their collections at any time:
+  * Change photo
+  * Change banner
+  * Change name
+  * Change description
+  * Add/edit social links
+
+
+4. ART CREATION & LISTING FOR AUCTION
+================================================================================
+- Users can mint their own artwork
+- Minted art can be listed directly for auction
+- Art fields:
+  * Image
+  * Title
+  * Description
+  * Metadata (uploaded to IPFS)
+
+
+5. AUCTION CREATION & STARTING BID
+================================================================================
+- Seller lists their NFT for auction
+- Starting bid (startingBid) is set by the seller
+- First bid must be at least equal to startingBid
+- Auction duration is configurable (min 1 minute - max 30 days)
+
+
+6. BID INCREMENT MECHANISM (5% MINIMUM)
+================================================================================
+- Each new bid must be at least 5% higher than the previous TOTAL bid
+- minBidIncrementPercentage = 500 (i.e. 5%)
+
+Example:
+  - First bid:  100 MON
+  - 2nd bid min: 105 MON (5% increase)
+  - 3rd bid min: 110.25 MON (5% increase)
+  - ...continues
+
+NOTE: The same user cannot bid consecutively (highest bidder cannot rebid)
+NOTE: Seller cannot bid on their own auction
+
+
+7. FEE STRUCTURE & RAFFLE MECHANISM
+================================================================================
+
+A) FEES TAKEN ON EACH BID:
+-----------------------------------
+When a user sends 100 MON:
+
+  1. Upfront Platform Fee: 1% (1 MON)
+     -> Sent immediately to platformFeeWallet
+
+  2. Raffle Fee: 2% (2 MON)
+     -> Added to raffle pool (accumulates in contract)
+
+  3. Actual Bid: 97% (97 MON)
+     -> Recorded as the real bid amount
+     -> Refunded to the previous highest bidder
+
+
+B) FEES TAKEN ON AUCTION END:
+-------------------------------------
+When the auction ends (if there is a winner):
+
+  1. End Platform Fee: 5% of TOTAL BID
+     -> For 100 MON total bid: 5 MON
+     -> Sent to platformFeeWallet
+
+  2. Seller Receives: Actual Bid - End Fee
+     -> 97 MON - 5 MON = 92 MON
+     -> Transferred to seller
+
+  3. NFT: Transferred to winner
+
+
+C) RAFFLE MECHANISM:
+----------------------
+- Can be triggered 5 seconds after auction ends
+- Random selection among all bidders
+- Entire raffle pool goes to the winner
+- Each bidder has equal chance (independent of bid amount)
+
+
+8. TOTAL FEE SUMMARY (100 MON BID EXAMPLE)
+================================================================================
+
+BIDDER SENDS:           100 MON
+---------------------------------
+Upfront Fee:            -1 MON   (to platform, immediately)
+Raffle Fee:             -2 MON   (to raffle pool)
+Actual Bid:             97 MON   (winner receives NFT)
+
+ON AUCTION END:
+---------------------------------
+End Fee:                -5 MON   (to platform)
+Seller Receives:        92 MON
+
+RAFFLE:
+---------------------------------
+Raffle Pool:            2 MON    (random bidder wins)
+
+
+9. MONEY FLOW DIAGRAM
+================================================================================
+
+[BIDDER] --100 MON--> [AUCTION CONTRACT]
+                           |
+                           +--1 MON--> [PLATFORM WALLET] (immediately)
+                           |
+                           +--2 MON--> [RAFFLE POOL] (accumulating)
+                           |
+                           +--97 MON-> [REFUND TO PREVIOUS BIDDER]
+
+[AUCTION END]
+                           |
+                           +--5 MON--> [PLATFORM WALLET]
+                           |
+                           +--92 MON-> [SELLER]
+                           |
+                           +--NFT----> [WINNER]
+
+[RAFFLE DRAW]
+                           |
+                           +--2 MON--> [RANDOM BIDDER]
+
+
+CURRENT SETTINGS (from AuctionFactory):
+================================================================================
+- upfrontPlatformFeePercentage: 100 (1%)
+- raffleFeePercentage:          200 (2%)
+- endPlatformFeePercentage:     500 (5%)
+- minBidIncrementPercentage:    500 (5%)
+- minAuctionDuration:           1 minute
+- maxAuctionDuration:           30 days
+
+TOTAL PLATFORM REVENUE: 1% + 5% = 6% (per successful auction)
+RAFFLE POOL:            2% (returned to bidders)

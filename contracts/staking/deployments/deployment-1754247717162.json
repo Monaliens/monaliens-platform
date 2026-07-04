@@ -1,0 +1,45 @@
+{
+  "network": "Monad Testnet",
+  "deployer": "0x52228AeA6211f6D1a5022bc266D14d3C06082b66",
+  "contracts": {
+    "nftCollection": "0xAe280cA8DfAaF852B0af828cD72391Ce7874FbB6",
+    "nftStaking": "0x1EB4626e303E2642eF02e3BB215F52F5D9f1cB74"
+  },
+  "version": "2.1.0",
+  "cooldownPeriod": 600,
+  "deploymentTime": "2025-08-03T19:01:57.162Z",
+  "blockNumber": 29128120,
+  "transactionHash": "0x77bc86988bbfd0ee29161f84aff9d682aa43175279ace7ff53c0efa7bb712aa8",
+  "features": [
+    "NFT Staking V2.1 - Production Ready",
+    "Admin migration functions for seamless upgrades",
+    "adminMigrateUser: Migrate users with custom timestamps",
+    "adminUpdateStakingTime: Update individual NFT staking times",
+    "adminUpdateCooldown: Update cooldown status",
+    "adminBatchUpdateStakingTimes: Batch update timestamps",
+    "getDetailedStakingInfo: Get full NFT staking details",
+    "Proper cooldown system (stake → startCooldown → wait → unstake)",
+    "Fixed unique stakers counting",
+    "Emergency withdraw functionality",
+    "Pausable for security"
+  ],
+  "adminFunctions": {
+    "migration": [
+      "adminMigrateUser(address,uint256[],uint256[],uint256[])",
+      "adminUpdateStakingTime(uint256,uint256)",
+      "adminUpdateCooldown(uint256,bool,uint256)",
+      "adminBatchUpdateStakingTimes(uint256[],uint256[])"
+    ],
+    "emergency": [
+      "emergencyWithdrawAll()",
+      "pause()",
+      "unpause()"
+    ],
+    "query": [
+      "getDetailedStakingInfo(uint256)",
+      "getContractStats()",
+      "getUserStakedTokens(address)",
+      "getCooldownInfo(uint256)"
+    ]
+  }
+}

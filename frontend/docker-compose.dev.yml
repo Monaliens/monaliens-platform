@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  frontend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      cache_from:
+        - node:20-alpine
+    container_name: monaliens-frontend-dev
+    ports:
+      - "3201:3201"
+    env_file:
+      - .env
+    environment:
+      - PORT=3201
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      # Bind mount for hot reload
+      - ./src:/app/src
+      - ./public:/app/public
+      # Named volume for node_modules (faster performance)
+      - node_modules_dev:/app/node_modules
+      # Cache volumes for better performance
+      - npm_cache:/app/.npm
+      - build_cache:/app/.cache
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3201"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M

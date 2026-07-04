@@ -1,0 +1,72 @@
+# Staging Dockerfile - Server build with dependency fix
+# Stage 1: Dependencies
+FROM node:20-alpine AS deps
+WORKDIR /app
+
+# Install build dependencies (linux-headers needed for usb package)
+RUN apk add --no-cache git python3 py3-setuptools make g++ libc6-compat linux-headers eudev-dev
+
+# Copy package files
+COPY package*.json ./
+
+# Clean install with legacy peer deps flag
+RUN npm ci --legacy-peer-deps --no-audit --no-fund && \
+    npm cache clean --force
+
+# Stage 2: Builder
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+# Install git for any git dependencies
+RUN apk add --no-cache git
+
+# Copy dependencies from deps stage
+COPY --from=deps /app/node_modules ./node_modules
+COPY package*.json ./
+
+# Copy source code
+COPY . .
+
+# Use .env.staging as .env.production for build
+RUN cp .env.staging .env.production
+
+# Build the application with staging environment
+RUN npm run build
+
+# Stage 3: Production Runtime
+FROM node:20-alpine AS production
+WORKDIR /app
+
+# Install runtime dependencies and serve
+RUN apk add --no-cache curl && \
+    npm install -g serve@14.2.4
+
+# Create non-root user for security
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S reactjs -u 1001
+
+# Copy built application from builder stage
+COPY --from=builder --chown=reactjs:nodejs /app/build ./build
+COPY --from=builder --chown=reactjs:nodejs /app/package.json ./package.json
+COPY --chown=reactjs:nodejs serve.json ./serve.json
+
+# Create necessary directories with proper permissions
+RUN mkdir -p /app/.cache && \
+    chown -R reactjs:nodejs /app/.cache
+
+USER reactjs
+
+# Expose port
+EXPOSE 3202
+
+# Environment variables for staging
+ENV NODE_ENV=production
+ENV PORT=3202
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:${PORT} || exit 1
+
+# Start staging server using serve. The config path must be absolute because
+# serve resolves relative config paths from the static directory.
+CMD sh -c "serve build -l ${PORT} --no-clipboard --config /app/serve.json"

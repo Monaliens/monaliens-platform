@@ -1,0 +1,55 @@
+# Development Dockerfile - Optimized for self-hosted deployment
+# Multi-stage build for better caching and smaller image size
+
+# Stage 1: Dependencies
+FROM node:20-alpine AS deps
+WORKDIR /app
+
+# Install build dependencies (linux-headers needed for usb package)
+RUN apk add --no-cache git python3 py3-setuptools make g++ libc6-compat linux-headers eudev-dev
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies with better caching
+RUN npm ci --legacy-peer-deps --no-audit --no-fund && \
+    npm cache clean --force
+
+# Stage 2: Development
+FROM node:20-alpine AS development
+WORKDIR /app
+
+# Install runtime dependencies only
+RUN apk add --no-cache curl git python3 py3-setuptools make g++ \
+    && addgroup -g 1001 -S nodejs \
+    && adduser -S reactjs -u 1001
+
+# Copy dependencies from deps stage
+COPY --from=deps --chown=reactjs:nodejs /app/node_modules ./node_modules
+COPY --chown=reactjs:nodejs package*.json ./
+
+# Copy source code
+COPY --chown=reactjs:nodejs . .
+
+# Create necessary directories with proper permissions
+RUN mkdir -p /app/.npm /app/.cache && \
+    chown -R reactjs:nodejs /app/.npm /app/.cache
+
+USER reactjs
+
+# Expose port
+EXPOSE 3201
+
+# Environment variables for development
+ENV NODE_ENV=development
+ENV PORT=3201
+ENV WATCHPACK_POLLING=true
+ENV CHOKIDAR_USEPOLLING=true
+ENV WDS_SOCKET_PORT=0
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD curl -f http://localhost:${PORT} || exit 1
+
+# Start development server with better performance
+CMD ["npm", "start"]

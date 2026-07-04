@@ -1,0 +1,28 @@
+{
+  "network": "monadMainnet",
+  "chainId": 143,
+  "deployedAt": "2024-12-15T00:00:00.000Z",
+  "AuctionFactory": {
+    "address": "0x2EfdCe8e15ba0E6323A343d9bfC84796f6C64A80",
+    "implementationAddress": "0x049f86a402F1CD073BD25882781c5CcEb2cC5B3f",
+    "relayer": "0xa7e1aa66eA4f746d4AfBB84DDDa65572622Ad37B",
+    "safeWithdrawalEnabled": true,
+    "upgradedAt": "2025-12-30T20:22:58.595Z"
+  },
+  "NFTCollectionFactory": {
+    "address": "0x4A981982F0d354e4D32007501eAAfaB782063e36"
+  },
+  "UserRegistry": {
+    "address": "0xB6fb160B13338476218e72C54370C491e39ae5EA"
+  },
+  "Entropy": {
+    "address": "0xD458261E832415CFd3BAE5E416FdF3230ce6F134",
+    "provider": "0x52DeaA1c84233F7bb8C8A45baeDE41091c616506"
+  },
+  "AuctionImplementation": {
+    "address": "0x38EAa8Cd1481418087fc518711c4E2d35604e91A",
+    "deployedAt": "2025-12-30T21:05:53.487Z",
+    "previousAddress": "0x6900760b2b7bF47a81CA54C3307E2eB67c98644c"
+  },
+  "updatedAt": "2025-12-30T21:05:53.487Z"
+}
